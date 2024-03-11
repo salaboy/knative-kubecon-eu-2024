@@ -7,3 +7,14 @@ Knative Maintainers Track KubeCon Paris. Demo Install.
 Clone: https://github.com/knative/func
 
 Build: 
+
+# Install and run the demo
+
+Create a KinD Cluster
+
+```
+kind create cluster
+```
+
+
+# 
