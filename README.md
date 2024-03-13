@@ -18,19 +18,17 @@ The script will create a kind cluster and install Knative Serving and friends
 
 # Run the demo
 
-Explain why do we need this -> 
+1. Setup Environment Variables
 ```
-export FUNC_ENABLE_HOST_BUILDER=true
+direnv allow
 ```
 
-Create a function: 
+2. Boostrap a 'hello' function
 
 ```
-mkdir hello
-cd hello
-func init
-
-rm *.go -> Explain this
+mkdir hello && cd hello
+func init --language go
+rm *.go # remove boilerplate code from template
 ```
 
 Create function hello.go
@@ -39,7 +37,7 @@ Create function hello.go
 ```
 
 ```
-func deploy --builder=host
+func deploy
 ```
 
 
