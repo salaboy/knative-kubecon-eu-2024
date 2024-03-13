@@ -6,7 +6,7 @@ function create_kind_cluster() {
   local version=${1:-1.28.7}
 
   # 1. Create registry container unless it already exists
-  local reg_name='margarita.dev'
+  local reg_name="${DEMO_DOMAIN}"
   local reg_port='5000'
   if [ "$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)" != 'true' ]; then
     docker run \
@@ -139,11 +139,10 @@ function install_serving() {
   kubectl apply -f https://raw.githubusercontent.com/knative/serving/main/test/config/externaldomaintls/certmanager/selfsigned/issuer.yaml
   kubectl apply -f https://raw.githubusercontent.com/knative/serving/main/test/config/externaldomaintls/certmanager/selfsigned/config-certmanager.yaml
 
-  # Setup margarita.dev = 127.0.0.1
   kubectl patch configmap/config-domain \
     --namespace knative-serving \
     --type merge \
-    --patch '{"data":{"margarita.dev":""}}'
+    --patch "{\"data\":{\"${DEMO_DOMAIN}\":\"\"}}"
 
   # Make it easier to use DomainMapping
   kubectl patch configmap/config-network \
