@@ -2,29 +2,19 @@
 
 Knative Maintainers Track KubeCon Paris. Demo Install. 
 
-# Build
-
-Clone: https://github.com/knative/func
-
-Build: 
+# Build/Install
 
 ```
-cd func/ 
-make
-mv func /usr/local/bin
+./install-tools.sh
 ```
 
-# Install Knative on a Cluster
+# Setup a Cluster
 
-Create a KinD Cluster
+The script will create a kind cluster and install Knative Serving and friends 
 
 ```
-kind create cluster
+./setup-cluster.sh
 ```
-
-Install Knative Serving
-
-
 
 # Run the demo
 
