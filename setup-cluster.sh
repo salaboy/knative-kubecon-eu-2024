@@ -121,8 +121,6 @@ function install_serving() {
   kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-crds.yaml
   kubectl wait --for condition=established --timeout=60s --all crd
   kubectl apply -f https://github.com/knative/serving/releases/latest/download/serving-core.yaml
-  kubectl apply -f https://github.com/knative-extensions/net-istio/releases/latest/download/net-istio.yaml
-  kubectl apply -f https://github.com/knative-extensions/net-certmanager/releases/latest/download/net-certmanager.yaml
 
   kubectl wait --namespace knative-serving \
                --all \
@@ -134,6 +132,19 @@ function install_serving() {
     --type merge \
     --patch '{"data":{"ingress.class":"istio.ingress.networking.knative.dev"}}'
 
+  kubectl apply -f https://github.com/knative-extensions/net-istio/releases/latest/download/net-istio.yaml
+
+  kubectl wait --namespace knative-serving \
+               --all \
+               --for=condition=ready pod \
+               --timeout=90s
+
+  kubectl apply -f https://github.com/knative-extensions/net-certmanager/releases/latest/download/net-certmanager.yaml
+
+  kubectl wait --namespace knative-serving \
+               --all \
+               --for=condition=ready pod \
+               --timeout=90s
 
   # Self signed issuer
   kubectl apply -f https://raw.githubusercontent.com/knative/serving/main/test/config/externaldomaintls/certmanager/selfsigned/issuer.yaml
