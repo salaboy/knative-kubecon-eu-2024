@@ -27,12 +27,12 @@ To make it easy to show the logs when showcasing the Lifecycle Hooks
 feature, this is handy
 ```
 logs() {
-  local pod=$(kubectl get po | grep margherita | awk '{print $1}')
+  local pod=$(kubectl get po | grep margarita | awk '{print $1}')
   kubectl logs -f $pod
 }
 ```
 (might want to explain where this command came from when you use it, or perhaps
-even show creating it during the margherita "Setup Environment" section)
+even show creating it during the margarita "Setup Environment" section)
 
 # Demo
 
@@ -45,7 +45,7 @@ Script Legend:
 
 Resetting environment between demo runthroughs:
 ```
-pushd ~/src/margherita.dev/www
+pushd ~/src/margarita.dev/www
 func delete && cd ../ && rm -rf www && mkdir www && cd $_
 clear
 ```
@@ -81,13 +81,13 @@ But enough preamble, let's create a Function"
 
 ## Initialize a New Function
 
-"Let's say we want to set up a service at `margherita.dev`"
+"Let's say we want to set up a service at `margarita.dev`"
 ```
-curl https://margherita.dev
+curl https://margarita.dev
 ```
 "Or we can use the `https` helper to make these commands more convenient:"
 ```
-https margherita.dev
+https margarita.dev
 ```
 "As you can see, there's nothing there yet.  There's also nothing running in
 our target cluster:"
@@ -154,14 +154,14 @@ func deploy           // Note this builds without using Podman or Docker
                       // but containerized builds using Buildpack and S2I
                       // are available, and a good choice for CI/CD
                       // Note it is building a multi-arch container
-https margherita.dev  // Note the auto-provisioned HTTPS certificate
+https margarita.dev  // Note the auto-provisioned HTTPS certificate
 ```
 "And now let's watch as the magic of Knative Serving will scale the service to
 zero when there are no requests"
 - open source code in Split A
 - watch pods in split B
 ```
-watch "kubectl get po | grep margherita"
+watch "kubectl get po | grep margarita"
 ```
 - While waiting for scale-down, can opine:
 
