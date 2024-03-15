@@ -24,7 +24,7 @@ we're spinning up a local kind cluster so we expect the DNS record to resolve to
 Enable glob matching if you're on zsh so you can run the `rm -v ^func.yaml`
 command in the script below.
 ```
-zetopt extended_glob
+setopt extended_glob
 ```
 To make it easy to show the logs when showcasing the Lifecycle Hooks
 feature, this is handy
@@ -48,11 +48,10 @@ Script Legend:
 
 Resetting environment between demo runthroughs:
 ```
-pushd ~/src/margarita.dev/www
-func delete && cd ../ && rm -rf www && mkdir www && cd $_
-clear
+direnv allow
+./reset-source.sh
+cd "$DEMO_DIR"
 ```
-`direnv allow`
 
 ## Setup Environment
 
@@ -99,7 +98,7 @@ kubectl get nodes
 ```
 "So let's initialize a new Go Function!"
 ```
-func init -l go
+func init --language go
 ```
 "It's ready to go, and comes with a helpful example Function in Go which echoes
 requests.  But rather than use the example we got when running `init`, for this
@@ -110,7 +109,7 @@ rm -v ^func.yaml
 git init          // Note func is intended to work alongside Git/GitOps etc.
                   // with every operation declarative and colocated with the
                   // source code.
-go mod init
+go mod init www
 bat go.mod        // Note the correct (and customizable) module name
 ```
 
@@ -130,7 +129,7 @@ type F struct{}
 
 func New() *F { return &F{} }
 
-func (f *F) Handle(_ context.Context, w http.ResponseWriter, r *http.Request) {
+func (f *F) Handle(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintln(w, "Hello, World!")
 }
 ```
