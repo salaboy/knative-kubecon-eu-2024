@@ -12,6 +12,9 @@ Knative Maintainers Track KubeCon Paris. Demo Install.
 
 The script will create a kind cluster and install Knative Serving and friends 
 
+Update the `DEMO_DOMAIN` variable in `.envrc` to point to your domain. For the demo
+we're spinning up a local kind cluster so we expect the DNS record to resolve to `127.0.0.1`
+
 ```
 ./setup-cluster.sh
 ```
