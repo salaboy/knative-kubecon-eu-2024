@@ -5,3 +5,6 @@ set -o xtrace
 
 go install sigs.k8s.io/kind@v0.22.0
 go install knative.dev/func@main
+
+brew install httpie
+brew install bat
