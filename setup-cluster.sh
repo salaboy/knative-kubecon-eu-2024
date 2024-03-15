@@ -2,12 +2,14 @@
 
 set -o errexit
 
+REGISTRY_PORT=5000
+
 function create_kind_cluster() {
   local version=${1:-1.28.7}
 
   # 1. Create registry container unless it already exists
   local reg_name="${DEMO_DOMAIN}"
-  local reg_port='5000'
+  local reg_port="${REGISTRY_PORT}"
   if [ "$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)" != 'true' ]; then
     docker run \
       -d --restart=always -p "127.0.0.1:${reg_port}:${reg_port}" --network bridge --name "${reg_name}" \
@@ -130,7 +132,23 @@ function install_serving() {
   kubectl patch configmap/config-network \
     --namespace knative-serving \
     --type merge \
-    --patch '{"data":{"ingress.class":"istio.ingress.networking.knative.dev"}}'
+    --patch '{"data":{
+      "ingress.class":"istio.ingress.networking.knative.dev",
+      "autocreate-cluster-domain-claims":"true",
+      "external-domain-tls": "enabled"
+    }}'
+
+  kubectl patch configmap/config-domain \
+    --namespace knative-serving \
+    --type merge \
+    --patch "{\"data\":{\"${DEMO_DOMAIN}\":\"\"}}"
+
+  kubectl patch configmap/config-deployment \
+    --namespace knative-serving \
+    --type merge \
+    --patch "{\"data\":{
+      \"registries-skipping-tag-resolving\": \"kind.local,ko.local,dev.local,${DEMO_DOMAIN}:${REGISTRY_PORT}\"
+  }}"
 
   kubectl apply -f https://github.com/knative-extensions/net-istio/releases/latest/download/net-istio.yaml
 
@@ -149,20 +167,6 @@ function install_serving() {
   # Self signed issuer
   kubectl apply -f https://raw.githubusercontent.com/knative/serving/main/test/config/externaldomaintls/certmanager/selfsigned/issuer.yaml
   kubectl apply -f https://raw.githubusercontent.com/knative/serving/main/test/config/externaldomaintls/certmanager/selfsigned/config-certmanager.yaml
-
-  kubectl patch configmap/config-domain \
-    --namespace knative-serving \
-    --type merge \
-    --patch "{\"data\":{\"${DEMO_DOMAIN}\":\"\"}}"
-
-  # Make it easier to use DomainMapping
-  kubectl patch configmap/config-network \
-    --namespace knative-serving \
-    --type merge \
-    --patch '{"data":{
-      "autocreate-cluster-domain-claims":"true",
-      "external-domain-tls": "enabled"
-    }}'
 }
 
 set -o verbose
