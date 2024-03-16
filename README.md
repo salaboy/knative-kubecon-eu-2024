@@ -30,7 +30,7 @@ To make it easy to show the logs when showcasing the Lifecycle Hooks
 feature, this is handy
 ```
 logs() {
-  local pod=$(kubectl get po | grep margarita | awk '{print $1}')
+  local pod=$(kubectl get po | grep paris | awk '{print $1}')
   kubectl logs -f $pod
 }
 ```
@@ -85,11 +85,11 @@ But enough preamble, let's create a Function"
 
 "Let's say we want to set up a service at `margarita.dev`"
 ```
-curl https://margarita.dev
+curl https://paris.default.margarita.dev
 ```
 "Or we can use the `https` helper to make these commands more convenient:"
 ```
-https margarita.dev
+https paris.default.margarita.dev
 ```
 "As you can see, there's nothing there yet.  There's also nothing running in
 our target cluster:"
@@ -109,7 +109,7 @@ rm -v ^func.yaml
 git init          // Note func is intended to work alongside Git/GitOps etc.
                   // with every operation declarative and colocated with the
                   // source code.
-go mod init www
+go mod init paris
 bat go.mod        // Note the correct (and customizable) module name
 ```
 
@@ -117,10 +117,9 @@ bat go.mod        // Note the correct (and customizable) module name
 
 Copy-paste `f.go` as:
 ```
-package www
+package paris
 
 import (
-        "context"
         "fmt"
         "net/http"
 )
@@ -152,18 +151,19 @@ deploying it publicly looks like"
 - clear the split with the results of `http` request
 - ^C the running Function
 ```
-func deploy           // Note this builds without using Podman or Docker
-                      // but containerized builds using Buildpack and S2I
-                      // are available, and a good choice for CI/CD
-                      // Note it is building a multi-arch container
-https margarita.dev  // Note the auto-provisioned HTTPS certificate
+func deploy  // Note this builds without using Podman or Docker
+             // but containerized builds using Buildpack and S2I
+             // are available, and a good choice for CI/CD
+             // Note it is building a multi-arch container
+
+https paris.default.margarita.dev  // Note the auto-provisioned HTTPS certificate
 ```
 "And now let's watch as the magic of Knative Serving will scale the service to
 zero when there are no requests"
 - open source code in Split A
 - watch pods in split B
 ```
-watch "kubectl get po | grep margarita"
+watch "kubectl get po | grep paris"
 ```
 - While waiting for scale-down, can opine:
 
