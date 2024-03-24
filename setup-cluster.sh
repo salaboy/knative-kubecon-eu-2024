@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 
 set -o errexit
+set -o nounset
 
 REGISTRY_PORT=5000
+
+if [[ -z "${DEMO_DOMAIN}" ]]; then
+  echo "Update DEMO_DOMAIN environment variable in the .envrc file"
+  exit 1
+fi
 
 function create_kind_cluster() {
   local version=${1:-1.28.7}

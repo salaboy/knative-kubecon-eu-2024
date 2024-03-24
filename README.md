@@ -35,7 +35,7 @@ logs() {
 }
 ```
 (might want to explain where this command came from when you use it, or perhaps
-even show creating it during the margarita "Setup Environment" section)
+even show creating it during the "Setup Environment" section)
 
 # Demo
 
@@ -83,13 +83,13 @@ But enough preamble, let's create a Function"
 
 ## Initialize a New Function
 
-"Let's say we want to set up a service at `margarita.dev`"
+"Let's say we want to set up a service at `example.com`"
 ```
-curl https://paris.default.margarita.dev
+curl https://paris.default.example.com
 ```
 "Or we can use the `https` helper to make these commands more convenient:"
 ```
-https paris.default.margarita.dev
+https paris.default.example.com
 ```
 "As you can see, there's nothing there yet.  There's also nothing running in
 our target cluster:"
@@ -156,7 +156,7 @@ func deploy  // Note this builds without using Podman or Docker
              // are available, and a good choice for CI/CD
              // Note it is building a multi-arch container
 
-https paris.default.margarita.dev  // Note the auto-provisioned HTTPS certificate
+https paris.default.example.com  // Note the auto-provisioned HTTPS certificate
 ```
 "And now let's watch as the magic of Knative Serving will scale the service to
 zero when there are no requests"
